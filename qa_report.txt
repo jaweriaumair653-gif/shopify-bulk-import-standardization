@@ -1,0 +1,21 @@
+Loaded 15 raw rows, 16 raw columns: ['Item Name', 'SKU Code', 'category', 'Sub Cat', 'Colour/Size', 'Cost (RMB)', 'Sell Price', 'Stock Qty', 'Wt', 'Wt Unit', 'Pics', 'Desc', 'Brand', 'Active?', 'barcode/UPC', 'Ship Req']
+
+Row 7: missing SKU -> placeholder generated ('NEEDS-SKU-LED-RING-LIGHT-10INC-7'). MUST be replaced with a real SKU before go-live.
+Row 7 (LED Ring Light 10inch w/ Tripod, NEEDS-SKU-LED-RING-LIGHT-10INC-7): non-numeric stock qty 'N/A' -> defaulted to 0, NEEDS SUPPLIER FOLLOW-UP
+Row 12: missing SKU -> placeholder generated ('NEEDS-SKU-MAGNETIC-PHONE-CAR-M-12'). MUST be replaced with a real SKU before go-live.
+Row 14 (Ceramic Coffee Mug Set of 4, MUG-SET4-WHT): Cost (RMB) '' -> empty. Cost per item left blank, NEEDS SUPPLIER FOLLOW-UP.
+Row 15 (Pet Grooming Glove Deshedding, PGG-STD-GRY): Active flag 'discontinued' unrecognized -> mapped to Status=archived/draft, VERIFY WITH CLIENT.
+Row 16 (Resistance Bands Set 5pc, RBS-5PC-MULTI): missing weight -> defaulted to 0g, NEEDS SUPPLIER FOLLOW-UP
+
+--- FILE-LEVEL VALIDATION ---
+PASS: All Variant SKU values unique.
+Row 13: EXACT DUPLICATE of row 4 (Title='Stainless Steel Water Bottle 750ml', SKU='SSB-750-SIL') -> dropped from output.
+
+Final row count written to Shopify CSV: 17 (from 15 raw supplier rows, 1 exact duplicates removed).
+
+--- SCOPE / SCHEMA NOTES ---
+Columns emitted match Shopify's officially documented CORE product-CSV schema (help.shopify.com/en/manual/products/import-export/using-csv), confirmed by live fetch on the date of this run.
+Deliberately OMITTED: Google Shopping AdWords Grouping/Labels/Custom Label 0-4 (Shopify says these are only consumed by third-party apps, not the Google/YouTube channel itself -- irrelevant unless the client's specific app requires them) and per-Market 'Included / Price / Compare-at price / [Market Name]' columns (these are generated dynamically per-store based on the merchant's own configured Market names, per Shopify's own documentation -- fabricating a market name here would be a guess, not a fact).
+ACTION FOR CLIENT before first real import: in Shopify Admin -> Products -> Export, export one existing product (or use Import > Download sample CSV) and diff its header row against this file's header row. If the store has Markets enabled, append the resulting Included/Price/Compare-at columns to this file before uploading -- those are the only columns this pipeline cannot see in advance.
+Product Category (Shopify Standard Taxonomy) intentionally left BLANK: mapping free-text supplier categories to Shopify's exact taxonomy strings/IDs requires either the client's approved taxonomy mapping table or a taxonomy lookup pass -- guessing here risks silently wrong tax categorization. 'Type' and 'Tags' carry the supplier's category/subcategory/brand instead so no information is lost.
+FX conversion for 'Cost per item': RMB -> USD at a placeholder rate of 0.14 used for this demo. Replace with the client's actual negotiated/live rate before go-live -- this number is illustrative only.
