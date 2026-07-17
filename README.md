@@ -132,7 +132,7 @@ Shopify Import Ready CSV
 Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/shopify-bulk-import-standardization.git
+git clone https://github.com/jaweriaumair653-gif/shopify-bulk-import-standardization.git
 ```
 
 Move into the project folder
